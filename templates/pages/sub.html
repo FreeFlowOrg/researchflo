@@ -1,1 +1,65 @@
-{% extends 'layouts/dashboard.html' %}
+{% extends 'layouts/main.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block header %}<link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">{% endblock %}
+
+{% block content %}
+<!-- flex css -->
+<style>
+.flex-container {
+  display: flex;
+  background-color: DodgerBlue;
+}
+
+.flex-container > div {
+  background-color: #f1f1f1;
+  margin: 10px;
+  padding: 20px;
+  font-size: 30px;
+}
+</style>
+<!-- //flex css -->
+<!-- Profile side bar -->
+<div class="row">
+
+  <div class="col-md-3">
+
+    <img class="img-thumbnail" src="//placehold.it/200x200" width="200" heigh="200" alt="">
+
+    <h5>Logged in as <i>{{ session['email'] }}</i> </h5>
+
+  </div> <!-- col-md-3 -->
+<!-- //Profile side bar -->
+
+<div class="col-md-9">
+  <h2> Research categories </h2>
+  <form action = "{{ url_for('narrow_down') }}" method = "POST">
+         Category:
+         <select name="select-domain" >
+           <option value="all">All</option>
+           <option value="electronics">Electronics</option>
+           <option value="ceramics">Ceramics</option>
+           <option value="energy">Energy</option>
+           <option value="nanomaterials">Nanomaterials</option>
+         </select>
+         <br>
+         <!-- CSS Flexbox type feed -->
+
+         <div class="flex-container">
+           {% for file in files %}
+           <a href="/download/{{ file['filename'] }}"><div>{{ file['filename'] }}</div></a>
+           {% endfor %}
+         </div>
+           <!-- //CSS Flexbox type feed -->
+
+      <br>
+
+
+<!-- Status table + File Upload  -->
+
+
+</form> <!-- col-md-9 --> <!-- Center Section -->
+<!-- //Status table + File Upload  -->
+</div>
+{% endblock %}

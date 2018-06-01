@@ -126,6 +126,18 @@ def download(filename):
     except Exception as e:
         return str(e)
 
+@app.route('/narrow_down',methods=['POST','GET'])
+def narrow_down():
+    try:
+        if request.form['select-domain'] == 'all':
+            files = Journal.query.all()
+        else:
+            files = Journal.query.filter_by(domain=request.form['select-domain']).all()
+        return render_template('pages/sub.html',files=files)
+    except Exception as e:
+        return str(e)
+
+
 @app.route('/dashboard',methods=['POST','GET'])
 def dashboard():
     if session['user_type'] == 'Publisher':
