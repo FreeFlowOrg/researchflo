@@ -9,7 +9,7 @@
 <style>
 .flex-container {
   display: flex;
-  background-color: DodgerBlue;
+  background-color: White;
 }
 
 .flex-container > div {
@@ -33,8 +33,8 @@
 <!-- //Profile side bar -->
 
 <div class="col-md-9">
-  <h2> Research categories </h2>
-  <form action = "{{ url_for('narrow_down') }}" method = "POST">
+  <h2> Published Journals</h2>
+  <form action = "{{ url_for('narrow_down') }}" method = "POST" >
          Category:
          <select name="select-domain" >
            <option value="all">All</option>
@@ -42,15 +42,16 @@
            <option value="ceramics">Ceramics</option>
            <option value="energy">Energy</option>
            <option value="nanomaterials">Nanomaterials</option>
-         </select>
+         </select><br>
+         <button class='btn btn-default' type=Submit>Filter<br>
          <br>
          <!-- CSS Flexbox type feed -->
-
+</form>
          <div class="flex-container">
            {% for file in files %}
-           <a href="/download/{{ file['filename'] }}"><div>{{ file['filename'] }}</div></a>
+           <div><a href="/download/{{ file['filename'] }}">{{ file['title'] }}</a></div>
            {% endfor %}
-         </div>
+          </div>
            <!-- //CSS Flexbox type feed -->
 
       <br>
@@ -59,7 +60,7 @@
 <!-- Status table + File Upload  -->
 
 
-</form> <!-- col-md-9 --> <!-- Center Section -->
+ <!-- col-md-9 --> <!-- Center Section -->
 <!-- //Status table + File Upload  -->
 </div>
 {% endblock %}
