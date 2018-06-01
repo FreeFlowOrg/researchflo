@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: MongoAlchemy
+Version: 0.19
+Summary: Document-Object Mapper/Toolkit for Mongo Databases
+Home-page: http://mongoalchemy.org/
+Author: Jeffrey Jenkins
+Author-email: jeff@qcircles.net
+License: MIT
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Database
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: pymongo
+
+UNKNOWN
+
+

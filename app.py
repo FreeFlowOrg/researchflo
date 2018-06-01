@@ -121,8 +121,10 @@ def paper_upload(): # Journal Upload
 
 @app.route('/download/<filename>',methods=['POST','GET'])
 def download(filename):
-    return send_file(safe_join(app.config['UPLOADED_FILES_DEST'],filename),as_attachment=True)
-
+    try:
+        return send_file(safe_join(app.config['UPLOADED_FILES_DEST'],filename),as_attachment=True)
+    except Exception as e:
+        return str(e)
 
 @app.route('/dashboard',methods=['POST','GET'])
 def dashboard():
