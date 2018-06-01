@@ -1,0 +1,12 @@
+Fabric
+Flask-SQLAlchemy
+Flask-WTF
+flask-mail
+flask-bootstrap
+flask-uploads
+WTForms
+coverage
+Flask-MongoAlchemy
+# ecdsa
+# paramiko
+# pycrypto
