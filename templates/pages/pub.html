@@ -1,0 +1,72 @@
+{% extends 'layouts/main.html' %}
+
+{% block title %} - Profile{% endblock %}
+
+{% block header %}<link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">{% endblock %}
+
+{% block content %}
+<!-- Profile side bar -->
+<div class="row">
+
+  <div class="col-md-3">
+
+    <img class="img-thumbnail" src="//placehold.it/200x200" width="200" heigh="200" alt="">
+
+    <h5>Logged in as <i>{{ session['email'] }}</i> </h5>
+
+  </div> <!-- col-md-3 -->
+<!-- //Profile side bar -->
+
+<div class="col-md-9">
+  <h2> Research Paper upload </h2>
+  <form action = "{{ url_for('paper_upload') }}" method = "POST" enctype = "multipart/form-data">
+         Category:
+         <select name="domain" >
+           <option value="electronics">Electronics</option>
+           <option value="ceramics">Ceramics</option>
+           <option value="energy">Energy</option>
+           <option value="nanomaterials">Nanomaterials</option>
+         </select>
+         <br>
+         <br>
+         Journal Title: <input type = "text" name="Title"><br><br>
+         <input type = "file" name = "file"><br>
+         <input type = "submit"/><br>
+      </form>
+      <br>
+
+
+<!-- Status table + File Upload  -->
+
+
+    <div class="row"><!-- table -->
+
+
+        <table class="pure-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Submission Date</th>
+            <th>Submitted Link</th>
+        </tr>
+    </thead>
+
+    <tbody>
+      {% for paper in papers %}
+        <tr>
+            <td>.</td>
+            <td>{{ paper['title'] }}</td>
+            <td>{{ paper['status'] }}</td>
+            <td>{{ date }}</td>
+      <td><a href="/download/{{ paper['filename'] }}">{{ paper['filename'] }}</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table> <!-- //table -->
+
+</div> <!-- col-md-9 --> <!-- Center Section -->
+<!-- //Status table + File Upload  -->
+</div>
+{% endblock %}

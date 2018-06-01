@@ -1,0 +1,22 @@
+{% extends 'layouts/main.html' %}
+
+{% block title %} - Profile{% endblock %}
+
+{% block header %}<link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">{% endblock %}
+
+{% block content %}
+<!-- Profile side bar -->
+<div class="row">
+
+  <div class="col-md-3">
+
+    <img class="img-thumbnail" src="//placehold.it/200x200" width="200" heigh="200" alt="">
+
+    <h5>Logged in as <i>{{ session['email'] }}</i> </h5>
+
+  </div> <!-- col-md-3 -->
+<!-- //Profile side bar -->
+</div> <!-- col-md-9 --> <!-- Center Section -->
+<!-- //Status table + File Upload  -->
+</div>
+{% endblock %}
