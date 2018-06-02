@@ -16,7 +16,7 @@
   background-color: #f1f1f1;
   margin: 10px;
   padding: 20px;
-  font-size: 30px;
+  font-size: 15px;
 }
 </style>
 <!-- //flex css -->
@@ -49,7 +49,11 @@
 </form>
          <div class="flex-container">
            {% for file in files %}
-           <div><a href="/download/{{ file['filename'] }}">{{ file['title'] }}</a></div>
+           <div>
+          <strong>Title</strong>: {{ file['title'] }}<br>
+          <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
+          <a href="/download/{{ file['filename'] }}">Download Paper</a><br>
+           </div>
            {% endfor %}
           </div>
            <!-- //CSS Flexbox type feed -->
