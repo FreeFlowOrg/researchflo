@@ -20,3 +20,7 @@ class Journal(db.Document):
     domain = db.StringField()
     status = db.StringField()
     filename = db.StringField()
+
+class Comments(db.Document):
+    user = db.StringField()
+    commenter = db.StringField()
