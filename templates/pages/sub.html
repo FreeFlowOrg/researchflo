@@ -37,13 +37,13 @@
   <form action = "{{ url_for('narrow_down') }}" method = "POST" >
          Category:
          <select name="select-domain" >
-           <option value="all">All</option>
-           <option value="electronics">Electronics</option>
-           <option value="ceramics">Ceramics</option>
-           <option value="energy">Energy</option>
-           <option value="nanomaterials">Nanomaterials</option>
-         </select><br>
-         <button class='btn btn-default' type=Submit>Filter<br>
+           <option value="all" selected>All</option>
+           <option value="electronics" {% if request.form['select-domain']=='electronics' %}selected{% endif %}>Electronics</option>
+           <option value="ceramics"{% if request.form['select-domain']=='ceramics' %}selected{% endif %}>Ceramics</option>
+           <option value="energy"{% if request.form['select-domain']=='energy' %}selected{% endif %}>Energy</option>
+           <option value="nanomaterials"{% if request.form['select-domain']=='nanomaterials' %}selected{% endif %}>Nanomaterials</option>
+         </select>
+         <button type=Submit>Filter</button>
          <br>
          <!-- CSS Flexbox type feed -->
 </form>

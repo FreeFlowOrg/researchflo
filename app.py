@@ -147,7 +147,7 @@ def dashboard():
         return render_template('pages/rev.html')
 
     elif session['user_type'] == 'Subscriber':
-        return render_template('pages/sub.html')
+        return render_template('pages/sub.html',files=Journal.query.all())
 
     return redirect(url_for('home'))
 
