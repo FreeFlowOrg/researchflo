@@ -141,7 +141,8 @@ def narrow_down():
 @app.route('/dashboard',methods=['POST','GET'])
 def dashboard():
     if session['user_type'] == 'Publisher':
-        return render_template('pages/pub.html',papers=Journal.query.filter_by(user_email=session['email']).all(),date=datetime.datetime.now())
+        return render_template('pages/pub.html',papers=Journal.query.filter_by(user_email=session['email']).all(),
+                                date=datetime.datetime.now(),comments=Comments.query.all())
 
     elif session['user_type'] == 'Reviewer':
         return render_template('pages/rev.html')
