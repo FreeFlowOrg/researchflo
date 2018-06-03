@@ -48,13 +48,13 @@
          <!-- CSS Flexbox type feed -->
 </form>
          <div class="flex-container">
-          {% for file in files %}
-          <strong>Title</strong>: {{ file['title'] }}<br>
-          <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
-          <a href="/download/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
-          <a href="/paper_error/{{ file['user_email'] }}"> Notify/Mention Error </a>
+           {% for file in files %}
+           <strong>Title</strong>: {{ file['title'] }}<br>
+           <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
+           <a href="/download/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
+           <a href="/paper_error/{{ file['user_email'] }}"> Notify/Mention Error </a>
           </div>
-          {% endfor %}
+            {% endfor %}
           </div>
            <!-- //CSS Flexbox type feed -->
 
