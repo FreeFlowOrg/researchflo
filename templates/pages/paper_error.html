@@ -10,10 +10,11 @@
 
 <div class="row">
 
-<form action="{{ url_for('paper_error') }}">
-  <input type="text" name="Title">
-  <input type="text" name="Detailed description">
-  <input type=submit>
+<form action="{{ url_for('paper_error_submit') }}">
+  User: <input type="text" value="{{ email }}" name="publisher" disabled> <br><br>
+  <strong>Error Title</strong>:<input type="text" name="Title"> <br><br>
+  <strong> Error Description</strong>:<input type="text" name="Detailed description"> <br><br>
+  <input type=submit><br>
 </form>
 
 </div>

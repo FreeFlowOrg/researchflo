@@ -44,20 +44,34 @@
            <option value="nanomaterials"{% if request.form['select-domain']=='nanomaterials' %}selected{% endif %}>Nanomaterials</option>
          </select>
          <button type=Submit>Filter</button>
+</form>
          <br>
          <!-- CSS Flexbox type feed -->
-</form>
+
          <div class="flex-container">
-           {% for file in files %}
+          {% for file in files %}
+          <div>
            <strong>Title</strong>: {{ file['title'] }}<br>
            <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
            <a href="/download/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
-           <a href="/paper_error/{{ file['user_email'] }}"> Notify/Mention Error </a>
-          </div>
+         </div>
+
             {% endfor %}
+
+
           </div>
            <!-- //CSS Flexbox type feed -->
-
+        <div class="flex-container">
+          <div>
+            <h3>Error Notification Form</h3>
+          <form action="{{ url_for('paper_error_submit') }}" method=POST>
+            Publisher Mail: <input type = "text" name ="Email"><br><br>
+            Error Title: <input type = "text" name="Title"/><br><br>
+            Detailed Description of Error: <input type = "text" name="Detailed Description"><br><br>
+            <input type=submit>
+            </form>
+         </div>
+        </div>
       <br>
 
 

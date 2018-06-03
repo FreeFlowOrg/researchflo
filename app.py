@@ -156,13 +156,17 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
-@app.route('/paper_error/<user_email>',methods=['POST','GET'])
-def paper_error(user_email):
-    if request.method =='POST':
-        comment = Comments(user=user_email,commenter=session['user_email'],title=request.form['Title'],desc=request.form['Detailed description'])
+@app.route('/paper_error_submit',methods=['POST','GET'])
+def paper_error_submit():
+        comment = Comments(user=request.form['Email'],commenter=session['email'],title=request.form['Title'],desc=request.form['Detailed Description'])
         comment.save()
         flash('Relevance/Errors in paper notified')
         return redirect(url_for('dashboard'))
+
+@app.route('/paper_error',methods=['POST','GET'])
+def paper_error():
+    email = request.form['Email']
+    return render_template('pages/paper_error.html',email=email)
 
 @app.route('/register',methods=['POST','GET'])
 def register():
