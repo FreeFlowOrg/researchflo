@@ -1,0 +1,20 @@
+{% extends 'layouts/main.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block header %}<link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">{% endblock %}
+
+{% block content %}
+
+<p class="lead"><i><h2>Grammatical and Relevance Issue Notification</h2></i></p>
+
+<div class="row">
+
+<form action="{{ url_for('paper_error') }}">
+  <input type="text" name="Title">
+  <input type="text" name="Detailed description">
+  <input type=submit>
+</form>
+
+</div>
+{% endblock %}

@@ -66,6 +66,35 @@
     </tbody>
 </table> <!-- //table -->
 
+<!-- Error notification  -->
+<div class="row"><!-- table -->
+
+
+    <table class="pure-table">
+<thead>
+    <tr>
+        <th>#</th>
+        <th>Sender</th>
+        <th>Title</th>
+        <th>Detailed description</th>
+    </tr>
+</thead>
+
+<tbody>
+  {% for comment in comments  %}
+    <tr>
+        <td>.</td>
+        <td>{{ comment['commenter'] }}</td>
+        <td>{{ comment['title'] }}</td>
+        <td>{{ comment['desc'] }}</td>
+  <td><a href="/download/{{ paper['filename'] }}">{{ paper['filename'] }}</a></td>
+    </tr>
+  {% endfor %}
+</tbody>
+</table> <!-- //table -->
+
+<!-- //Error notification   -->
+
 </div> <!-- col-md-9 --> <!-- Center Section -->
 <!-- //Status table + File Upload  -->
 </div>

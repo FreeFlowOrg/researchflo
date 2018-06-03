@@ -24,3 +24,5 @@ class Journal(db.Document):
 class Comments(db.Document):
     user = db.StringField()
     commenter = db.StringField()
+    title = db.StringField()
+    desc = db.StringField()
