@@ -152,6 +152,8 @@ def dashboard():
 
     return redirect(url_for('home'))
 
+
+
 @app.route('/logout',methods=['POST','GET'])
 def logout():
     session.clear()
@@ -160,9 +162,10 @@ def logout():
 @app.route('/check_notification',methods=['POST','GET'])
 def check_notification():
     data = Comments.query.filter_by(user = session['email']).first()
-    data.remove()
+    if data != None:
+        data.remove()
     return redirect(url_for('dashboard'))
-    
+
 
 @app.route('/paper_error_submit',methods=['POST','GET'])
 def paper_error_submit():
