@@ -1,1 +1,71 @@
-{% extends 'layouts/dashboard.html' %}
+{% extends 'layouts/main.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block header %}<link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">{% endblock %}
+
+{% block content %}
+<!-- flex css -->
+<style>
+.flex-container {
+  display: flex;
+  background-color: White;
+}
+
+.flex-container > div {
+  background-color: #f1f1f1;
+  margin: 10px;
+  padding: 20px;
+  font-size: 15px;
+}
+</style>
+<!-- //flex css -->
+<!-- Profile side bar -->
+<div class="row">
+
+  <div class="col-md-3">
+
+    <img class="img-thumbnail" src="//placehold.it/200x200" width="200" heigh="200" alt="">
+
+    <h5>Logged in as <i>{{ session['email'] }}</i> </h5>
+
+  </div> <!-- col-md-3 -->
+<!-- //Profile side bar -->
+
+<div class="col-md-9">
+  <h2>Papers for Scrutiny</h2>
+  <form action = "{{ url_for('narrow_down') }}" method = "POST" >
+         Category:
+         <select name="select-domain" >
+           <option value="all" selected>All</option>
+           <option value="electronics" {% if request.form['select-domain']=='electronics' %}selected{% endif %}>Electronics</option>
+           <option value="ceramics"{% if request.form['select-domain']=='ceramics' %}selected{% endif %}>Ceramics</option>
+           <option value="energy"{% if request.form['select-domain']=='energy' %}selected{% endif %}>Energy</option>
+           <option value="nanomaterials"{% if request.form['select-domain']=='nanomaterials' %}selected{% endif %}>Nanomaterials</option>
+         </select>
+         <button type=Submit>Filter</button>
+</form>
+         <br>
+         <!-- CSS Flexbox type feed -->
+
+         <div class="flex-container">
+          {% for file in files %}
+          <div>
+           <strong>Title</strong>: {{ file['title'] }}<br>
+           <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
+           <a href="/download/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
+         </div>
+          {% endfor %}
+
+
+          </div>
+           <!-- //CSS Flexbox type feed -->
+
+
+<!-- Status table + File Upload  -->
+
+
+ <!-- col-md-9 --> <!-- Center Section -->
+<!-- //Status table + File Upload  -->
+</div>
+{% endblock %}

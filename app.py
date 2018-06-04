@@ -128,14 +128,24 @@ def download(filename):
 
 @app.route('/narrow_down',methods=['POST','GET'])
 def narrow_down():
-    try:
-        if request.form['select-domain'] == 'all':
-            files = Journal.query.all()
-        else:
-            files = Journal.query.filter_by(domain=request.form['select-domain']).all()
-        return render_template('pages/sub.html',files=files)
-    except Exception as e:
-        return str(e)
+        if session['user_type'] == 'Subscriber':
+            try:
+                if request.form['select-domain'] == 'all':
+                    files = Journal.query.all()
+                else:
+                    files = Journal.query.filter_by(domain=request.form['select-domain']).all()
+                return render_template('pages/sub.html',files=files)
+            except Exception as e:
+                return str(e)
+
+        elif session['user_type'] == 'Publisher':
+            try:
+                if request.form['select-domain'] == 'all':
+                    files = Journal.query.filter(Journal.status!='Accepted').all()
+                else:
+                    files = Journal.query.filter(Journal.domain=request.form['select-domain'],Journal.status!='Accepted').all()
+                    return render_template('pages/pub.html',files=files)
+
 
 ### DASHBOARD
 @app.route('/dashboard',methods=['POST','GET'])
@@ -145,7 +155,7 @@ def dashboard():
                                 date=datetime.datetime.now(),comments=Comments.query.filter_by(user=session['email']).all())
 
     elif session['user_type'] == 'Reviewer':
-        return render_template('pages/rev.html')
+        return render_template('pages/rev.html',papers = Journal.query.filter(Journal.status != 'Accepted').all())
 
     elif session['user_type'] == 'Subscriber':
         return render_template('pages/sub.html',files=Journal.query.filter_by(status='Accepted').all())
