@@ -162,6 +162,7 @@ def check_notification():
     data = Comments.query.filter_by(user = session['email']).first()
     data.remove()
     return redirect(url_for('dashboard'))
+    
 
 @app.route('/paper_error_submit',methods=['POST','GET'])
 def paper_error_submit():
