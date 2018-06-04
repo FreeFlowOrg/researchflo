@@ -137,7 +137,7 @@ def narrow_down():
     except Exception as e:
         return str(e)
 
-
+### DASHBOARD
 @app.route('/dashboard',methods=['POST','GET'])
 def dashboard():
     if session['user_type'] == 'Publisher':
@@ -148,7 +148,7 @@ def dashboard():
         return render_template('pages/rev.html')
 
     elif session['user_type'] == 'Subscriber':
-        return render_template('pages/sub.html',files=Journal.query.all())
+        return render_template('pages/sub.html',files=Journal.query.filter_by(status='Accepted').all())
 
     return redirect(url_for('home'))
 
