@@ -139,12 +139,11 @@ def narrow_down():
                 return str(e)
 
         elif session['user_type'] == 'Publisher':
-            try:
-                if request.form['select-domain'] == 'all':
-                    files = Journal.query.filter(Journal.status!='Accepted').all()
-                else:
-                    files = Journal.query.filter(Journal.domain=request.form['select-domain'],Journal.status!='Accepted').all()
-                    return render_template('pages/pub.html',files=files)
+            if request.form['select-domain'] == 'all':
+                files = Journal.query.filter(Journal.status!='Accepted').all()
+            else:
+                files = Journal.query.filter(Journal.domain = request.form['select-domain'] and Journal.status != 'Accepted').all()
+                return render_template('pages/pub.html',files=files)
 
 
 ### DASHBOARD
