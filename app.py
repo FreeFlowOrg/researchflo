@@ -142,7 +142,7 @@ def narrow_down():
 def dashboard():
     if session['user_type'] == 'Publisher':
         return render_template('pages/pub.html',papers=Journal.query.filter_by(user_email=session['email']).all(),
-                                date=datetime.datetime.now(),comments=Comments.query.all())
+                                date=datetime.datetime.now(),comments=Comments.query.filter_by(user=session['email']).all())
 
     elif session['user_type'] == 'Reviewer':
         return render_template('pages/rev.html')
@@ -156,6 +156,12 @@ def dashboard():
 def logout():
     session.clear()
     return redirect(url_for('home'))
+
+@app.route('/check_notification',methods=['POST','GET'])
+def check_notification():
+    data = Comments.query.filter_by(user = session['email']).first()
+    data.remove()
+    return redirect(url_for('dashboard'))
 
 @app.route('/paper_error_submit',methods=['POST','GET'])
 def paper_error_submit():
