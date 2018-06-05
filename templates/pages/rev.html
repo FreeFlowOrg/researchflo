@@ -54,6 +54,12 @@
            <strong>Title</strong>: {{ file['title'] }}<br>
            <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
            <a href="/download/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
+           <select name="status-control" >
+             <option value="Accepted">Accept</option>
+             <option value="Under Peer Review">Set to Peer Review</option>
+             <option value="Needs Revision">Request Review</option>
+             <option value=""></option>
+           </select>
          </div>
           {% endfor %}
 
