@@ -102,6 +102,12 @@ def login():
                     session['user_type'] = kind
                     return redirect(url_for('dashboard'))
                     #publisher login
+            elif user and user.type == 'Editor' :
+                if bcrypt.hashpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')) == user.password.encode('utf-8'):
+                    session['email'] = form.email.data
+                    session['user_type'] = kind
+                    return redirect(url_for('dashboard'))
+
         elif not user:
             error = 'Incorrect credentials'
             flash(error)
@@ -148,6 +154,15 @@ def narrow_down():
                 files = Journal.query.filter(Journal.domain==request.form['select-domain'],Journal.status != 'Accepted').all()
                 return render_template('pages/rev.html',files=files)
 
+        elif session['user_type'] == 'Editor':
+            if request.form['select-domain'] == 'all':
+                files = Journal.query.filter(Journal.status=='Under Editor Review').all()
+                return render_template('pages/editor.html',files=files)
+            else:
+                files = Journal.query.filter(Journal.domain==request.form['select-domain'],Journal.status == 'Under Editor Review').all()
+                return render_template('pages/editor.html',files=files)
+
+
 
 ### DASHBOARD
 @app.route('/dashboard',methods=['POST','GET'])
@@ -166,10 +181,10 @@ def dashboard():
 
 
 
-@app.route('/paper_accept/<title>',methods=['POST','GET'])
-def paper_accept(title):
-    paper=Journal.query.filter_by(title=title).first()
-    paper.status = 'Accepted'
+@app.route('/paper_editor/<title>',methods=['POST','GET'])
+def paper_editor(title):
+    paper = Journal.query.filter_by(title=title).first()
+    paper.status = 'Under Editor Review'
     paper.save()
     flash('The Journal Paper has been reviewed. Information will be communicated to the Publisher.')
     return redirect(url_for('dashboard'))
