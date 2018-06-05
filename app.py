@@ -175,7 +175,9 @@ def dashboard():
         return render_template('pages/rev.html',files = Journal.query.filter(Journal.status != 'Accepted').all())
 
     elif session['user_type'] == 'Subscriber':
-        return render_template('pages/sub.html',files=Journal.query.filter_by(status='Accepted').all())
+        return render_template('pages/sub.html',files=Journal.query.filter(Journal.status=='Accepted').all())
+    elif session['user_type'] == 'Editor':
+        return render_template('pages/editor.html',files=Journal.query.filter(Journal.status=='Under Editor Review').all())
 
     return redirect(url_for('home'))
 

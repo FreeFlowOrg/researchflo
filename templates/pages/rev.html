@@ -54,8 +54,12 @@
            <strong>Title</strong>: {{ file['title'] }}<br>
            <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
            <a href="/download/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
-            <a href="/paper_editor/{{ file['title'] }}">Sent to Editor for Final Review</a><br><br>
-            <a href="/paper_peer_review/{{ file['title'] }}">Set to Peer Review</a><br><br>
+            <a href="/paper_editor/{{ file['title'] }}">Send to Editor for Final Review</a><br><br>
+            {% if file['status']!='Under Peer Review' %}
+            <a href="/paper_peer_review/{{ file['title'] }}">Shift to Peer Review</a><br><br>
+            {% else %}
+            <i>Peers Reviewing</i><br><br>
+            {% endif %}
             <a href="/paper_revision/{{ file['title'] }}">Request Review</a><br><br>
 
          </div>
