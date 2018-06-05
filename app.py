@@ -148,10 +148,10 @@ def narrow_down():
 
         elif session['user_type'] == 'Reviewer':
             if request.form['select-domain'] == 'all':
-                files = Journal.query.filter(Journal.status!='Accepted').all()
+                files = Journal.query.filter(Journal.status=='Submission Received' and Journal.status=='Under Peer Review').all()
                 return render_template('pages/rev.html',files=files)
             else:
-                files = Journal.query.filter(Journal.domain==request.form['select-domain'],Journal.status != 'Accepted').all()
+                files = Journal.query.filter(Journal.domain==request.form['select-domain'] and Journal.status == 'Submission Received' and Journal.status=='Under Peer Review').all()
                 return render_template('pages/rev.html',files=files)
 
         elif session['user_type'] == 'Editor':
@@ -172,7 +172,7 @@ def dashboard():
                                 date=datetime.datetime.now(),comments=Comments.query.filter_by(user=session['email']).all())
 
     elif session['user_type'] == 'Reviewer':
-        return render_template('pages/rev.html',files = Journal.query.filter(Journal.status != 'Accepted').all())
+        return render_template('pages/rev.html',files = Journal.query.filter(Journal.status=='Submission Received').all())
 
     elif session['user_type'] == 'Subscriber':
         return render_template('pages/sub.html',files=Journal.query.filter(Journal.status=='Accepted').all())
@@ -182,6 +182,12 @@ def dashboard():
     return redirect(url_for('home'))
 
 
+
+
+
+
+
+# paper logic
 
 @app.route('/paper_editor/<title>',methods=['POST','GET'])
 def paper_editor(title):
@@ -206,6 +212,33 @@ def paper_revision(title):
     paper.save()
     flash('The Journal Paper has been reviewed. Information will be communicated to the Publisher.')
     return redirect(url_for('dashboard'))
+
+@app.route('/paper_reject/<title>',methods=['POST','GET'])
+def paper_reject(title):
+    paper = Journal.query.filter_by(title=title).first()
+    paper.status = 'Rejected'
+    paper.save()
+    flash('The Journal Paper has been reviewed. Information will be communicated to the Publisher.')
+    return redirect(url_for('dashboard'))
+
+@app.route('/paper_accept/<title>',methods=['POST','GET'])
+def paper_accept(title):
+    paper = Journal.query.filter_by(title=title).first()
+    paper.status = 'Accepted'
+    paper.save()
+    flash('The Journal Paper has been reviewed. Information will be communicated to the Publisher.')
+    return redirect(url_for('dashboard'))
+
+@app.route('/sub_peer',methods=['POST','GET'])
+def sub_peer():
+    return render_template('pages/sub_peer.html',files=Journal.query.filter(Journal.status=='Under Peer Review').all())
+
+
+
+
+
+
+
 
 @app.route('/logout',methods=['POST','GET'])
 def logout():
