@@ -81,30 +81,31 @@ def login():
     error = None
     if request.method == 'POST':
         user = User.query.filter_by(email=form.email.data).first()
-        kind = user.type
+        if user:
+            kind = user.type
         #  login
-        if user.type == 'Reviewer':
-            if bcrypt.hashpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')) == user.password.encode('utf-8'):
-                session['email'] = form.email.data
-                session['user_type'] = kind
-                return redirect(url_for('dashboard'))
+            if user.type == 'Reviewer':
+                if bcrypt.hashpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')) == user.password.encode('utf-8'):
+                    session['email'] = form.email.data
+                    session['user_type'] = kind
+                    return redirect(url_for('dashboard'))
                 # reviewer login
-        elif user and user.type == 'Subscriber' :
-            if bcrypt.hashpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')) == user.password.encode('utf-8'):
-                session['email'] = form.email.data
-                session['user_type'] = kind
-                return redirect(url_for('dashboard'))
-                # subscriber login
-        elif user and user.type == 'Publisher' :
-            if bcrypt.hashpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')) == user.password.encode('utf-8'):
-                session['email'] = form.email.data
-                session['user_type'] = kind
-                return redirect(url_for('dashboard'))
-                # publisher login
-
-
-        if not user:
+            elif user and user.type == 'Subscriber' :
+                if bcrypt.hashpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')) == user.password.encode('utf-8'):
+                    session['email'] = form.email.data
+                    session['user_type'] = kind
+                    return redirect(url_for('dashboard'))
+                    # subscriber login
+            elif user and user.type == 'Publisher' :
+                if bcrypt.hashpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')) == user.password.encode('utf-8'):
+                    session['email'] = form.email.data
+                    session['user_type'] = kind
+                    return redirect(url_for('dashboard'))
+                    #publisher login
+        elif not user:
             error = 'Incorrect credentials'
+            flash(error)
+            return redirect(url_for('login'))
 
     return render_template('forms/login.html', form=form, error=error)
 
