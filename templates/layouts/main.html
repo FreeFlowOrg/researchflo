@@ -81,7 +81,7 @@
             <li><a href="{{ url_for('register') }}">Signup</a></li>
             <li><a href="{{ url_for('login') }}">Login</a></li>
 
-            {% else %}
+            {% elif session %}
             <br>
             <li>Logged in as <b>{{ session['email'] }}</b></li>
 

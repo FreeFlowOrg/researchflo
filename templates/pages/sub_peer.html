@@ -33,8 +33,8 @@
 <!-- //Profile side bar -->
 
 <div class="col-md-9">
-  <h2> Published Journals</h2>
-  <form action = "{{ url_for('narrow_down') }}" method = "POST" >
+  <h2> Journals Under Peer Review</h2>
+  <form action = "{{ url_for('narrow_down_peer_review') }}" method = "POST" >
          Category:
          <select name="select-domain" >
            <option value="all" selected>All</option>

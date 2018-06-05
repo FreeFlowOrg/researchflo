@@ -121,7 +121,7 @@ def paper_upload(): # Journal Upload
         filename = files.save(request.files['file'])
 
         doc = Journal(title=request.form['Title'],user_email=session['email'],
-                    domain=request.form['domain'],status="Submission received",filename=filename)
+                    domain=request.form['domain'],status="Submission received",filename=filename,date=datetime.datetime.utcnow())
         doc.save()
         flash('Journal Submitted')
         return redirect(url_for('dashboard'))
@@ -139,10 +139,11 @@ def narrow_down():
         if session['user_type'] == 'Subscriber':
             try:
                 if request.form['select-domain'] == 'all':
-                    files = Journal.query.all()
+                    files = Journal.query.filter(Journal.status=='Accepted').all()
+
                 else:
                     files = Journal.query.filter_by(domain=request.form['select-domain']).all()
-                    return render_template('pages/sub.html',files=files)
+                return render_template('pages/sub.html',files=files)
             except Exception as e:
                 return str(e)
 
@@ -162,14 +163,25 @@ def narrow_down():
                 files = Journal.query.filter(Journal.domain==request.form['select-domain'],Journal.status == 'Under Editor Review').all()
                 return render_template('pages/editor.html',files=files)
 
+@app.route('/narrow_down_peer_review',methods=['POST','GET'])
+def narrow_down_peer_review():
+    if request.method=='POST':
+        try:
+            if request.form['select-domain'] == 'all':
+                files = Journal.query.filter(Journal.status=='Under Peer Review').all()
 
+            else:
+                files = Journal.query.filter(Journal.domain==request.form['select-domain'] and Journal.status=='Under Peer Review').all()
+            return render_template('pages/sub_peer.html',files=files)
+        except Exception as e:
+            return str(e)
 
 ### DASHBOARD
 @app.route('/dashboard',methods=['POST','GET'])
 def dashboard():
     if session['user_type'] == 'Publisher':
         return render_template('pages/pub.html',papers=Journal.query.filter_by(user_email=session['email']).all(),
-                                date=datetime.datetime.now(),comments=Comments.query.filter_by(user=session['email']).all())
+                                comments=Comments.query.filter_by(user=session['email']).all())
 
     elif session['user_type'] == 'Reviewer':
         return render_template('pages/rev.html',files = Journal.query.filter(Journal.status=='Submission Received').all())
