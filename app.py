@@ -165,6 +165,30 @@ def dashboard():
 
 
 
+@app.route('/paper_accept/<title>',methods=['POST','GET'])
+def paper_accept(title):
+    paper=Journal.query.filter_by(title=title).first()
+    paper.status = 'Accepted'
+    paper.save()
+    flash('The Journal Paper has been reviewed. Information will be communicated to the Publisher.')
+    return redirect(url_for('dashboard'))
+
+@app.route('/paper_peer_review/<title>',methods=['POST','GET'])
+def paper_peer_review(title):
+    paper=Journal.query.filter_by(title=title).first()
+    paper.status = 'Under Peer Review'
+    paper.save()
+    flash('The Journal Paper has been reviewed. Information will be communicated to the Publisher.')
+    return redirect(url_for('dashboard'))
+
+@app.route('/paper_revision/<title>',methods=['POST','GET'])
+def paper_revision(title):
+    paper=Journal.query.filter_by(title=title).first()
+    paper.status = 'Needs Revision'
+    paper.save()
+    flash('The Journal Paper has been reviewed. Information will be communicated to the Publisher.')
+    return redirect(url_for('dashboard'))
+
 @app.route('/logout',methods=['POST','GET'])
 def logout():
     session.clear()
