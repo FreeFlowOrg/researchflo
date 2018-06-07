@@ -40,7 +40,7 @@ configure_uploads(app,files)
 # //App Config.
 #----------------------------------------------------------------------------#
 
-
+os.chdir('/tmp')
 # Automatically tear down SQLAlchemy.
 '''
 @app.teardown_request
