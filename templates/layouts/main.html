@@ -16,19 +16,21 @@
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
 <!-- /CDN -->
 
 
 
 <!-- styles -->
 
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/font-awesome-4.1.0.min.css') }}"/>
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/bootstrap-3.1.1.min.css') }}"/>
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/bootstrap-theme-3.1.1.min.css') }}"/>
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/layout.main.css') }}" />
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/main.css') }}" />
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/main.responsive.css') }}" />
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/main.quickfix.css') }}" />
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome-4.1.0.min.css') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-3.1.1.min.css') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme-3.1.1.min.css') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/layout.main.css') }}" />
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.responsive.css') }}" />
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.quickfix.css') }}" />
+
 <!-- /styles -->
 
 <!-- favicons -->
@@ -41,7 +43,7 @@
 <!-- /favicons -->
 
 <!-- scripts -->
-<script src="{{ url_for('static', filename='/js/libs/modernizr-2.8.2.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/modernizr-2.8.2.min.js') }}"></script>
 <!--[if lt IE 9]><script src="/static/js/libs/respond-1.4.2.min.js"></script><![endif]-->
 <!-- /scripts -->
 
@@ -127,18 +129,12 @@
     </div>
   </div>
 
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script type="text/javascript" src="{{ url_for('static', filename='/js/libs/jquery-1.11.1.min.js') }}"><\/script>')</script>
-  <script type="text/javascript" src="{{ url_for('static', filename='/js/libs/bootstrap-3.1.1.min.js') }}" defer></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='/js/plugins.js') }}" defer></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='/js/script.js') }}" defer></script>
-  <!-- Google Analytics - Change UA-XXXXX-X to be your site's ID -->
-  <script>
-  window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']];
-  Modernizr.load({
-    load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
-  });
-  </script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"/>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/libs/jquery-1.11.1.min.js') }}"/>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/libs/bootstrap-3.1.1.min.js') }}"/>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/plugins.js') }}" />
+  <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"/>
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 </body>
