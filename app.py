@@ -18,10 +18,7 @@ import datetime
 import time
 import random
 from sqlalchemy.pool import StaticPool
-from config import S3_BUCKET
-from helpers import s3
-import helpers
-
+import boto3
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -78,7 +75,7 @@ def upload_file_to_s3(file, bucket_name, acl="public-read"):
             file.filename,
             ExtraArgs={
                 "ACL": acl,
-                "ContentType": file.content_type
+                "ContentType":file.content_type
             }
         )
 
@@ -152,13 +149,15 @@ def paper_upload(): # Journal Upload
         doc = Journal(title=request.form['Title'],user_email=session['email'],
                     domain=request.form['domain'],status="Submission received",filename=filename,date=datetime.datetime.utcnow())
         doc.save()
-        flash('Journal Submitted')
-        output = upload_file_to_s3(file, app.config["S3_BUCKET"])
-        return str(output)
+        data = open(app.config['UPLOADED_FILES_DEST']+'/'+filename, 'rb')
+        s3 = boto3.client('s3')
+        s3.put_object(Bucket=app.config['S3_BUCKET'], Key=filename+'_'+session['email'], Body=data)
+        return 'file uploaded to s3'
 
 @app.route('/download/<filename>',methods=['POST','GET'])
 def download(filename):
-    return send_file(safe_join(app.config['UPLOADED_FILES_DEST'],filename),as_attachment=True)
+    file=s3.get_object(Bucket=app.config['S3_BUCKET'],Key=filename+'_'+session['email'])
+    return send_file(file,as_attachment=True)
 
 
 @app.route('/narrow_down',methods=['POST','GET'])
