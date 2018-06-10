@@ -18,6 +18,9 @@ import datetime
 import time
 import random
 from sqlalchemy.pool import StaticPool
+from config import S3_BUCKET
+from helpers import s3
+import helpers
 
 
 #----------------------------------------------------------------------------#
@@ -60,10 +63,34 @@ def login_required(test):
             return redirect(url_for('login'))
     return wrap
 '''
+
 #----------------------------------------------------------------------------#
-# Controllers.
+#UPLOAD TO S3 BUCKET method
+#----------------------------------------------------------------------------#
+def upload_file_to_s3(file, bucket_name, acl="public-read"):
+
+
+    try:
+        
+        s3.upload_fileobj(
+            file,
+            bucket_name,
+            file.filename,
+            ExtraArgs={
+                "ACL": acl,
+                "ContentType": file.content_type
+            }
+        )
+
+    except Exception as e:
+        print("Something Happened: ", e)
+        return e
+
+    return "{}{}".format(app.config["S3_LOCATION"], file.filename)
+
 #----------------------------------------------------------------------------#
 
+#----------------------------------------------------------------------------#
 
 @app.route('/')
 def home():
@@ -118,13 +145,16 @@ def login():
 @app.route('/paper_upload',methods=['POST','GET'])
 def paper_upload(): # Journal Upload
     if  request.method == 'POST' and 'file' in request.files:
+        # for Amazon S3
+        os.chdir('/tmp')
         filename = files.save(request.files['file'])
-
+        file = request.files['file']
         doc = Journal(title=request.form['Title'],user_email=session['email'],
                     domain=request.form['domain'],status="Submission received",filename=filename,date=datetime.datetime.utcnow())
         doc.save()
         flash('Journal Submitted')
-        return redirect(url_for('dashboard'))
+        output = upload_file_to_s3(file, app.config["S3_BUCKET"])
+        return str(output)
 
 @app.route('/download/<filename>',methods=['POST','GET'])
 def download(filename):
