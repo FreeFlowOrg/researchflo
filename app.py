@@ -18,7 +18,7 @@ import datetime
 import time
 import random
 from sqlalchemy.pool import StaticPool
-import boto3
+import boto3,botocore
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -88,6 +88,7 @@ def upload_file_to_s3(file, bucket_name, acl="public-read"):
 #----------------------------------------------------------------------------#
 
 #----------------------------------------------------------------------------#
+s3 = boto3.client('s3')
 
 @app.route('/')
 def home():
@@ -151,14 +152,9 @@ def paper_upload(): # Journal Upload
         doc.save()
         data = open(app.config['UPLOADED_FILES_DEST']+'/'+filename, 'rb')
         s3 = boto3.client('s3')
-        s3.put_object(Bucket=app.config['S3_BUCKET'], Key=filename+'_'+session['email'], Body=data)
-        return 'file uploaded to s3'
-
-@app.route('/download/<filename>',methods=['POST','GET'])
-def download(filename):
-    file=s3.get_object(Bucket=app.config['S3_BUCKET'],Key=filename+'_'+session['email'])
-    return send_file(file,as_attachment=True)
-
+        s3.put_object(Bucket=app.config['S3_BUCKET'], Key=filename, Body=data)
+        flash('Your paper has been sent for Review. You can check your review status in the Submitted Papers section')
+        return redirect(url_for('dashboard'))
 
 @app.route('/narrow_down',methods=['POST','GET'])
 def narrow_down():

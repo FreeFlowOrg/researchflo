@@ -60,7 +60,7 @@
             <td>{{ paper['title'] }}</td>
             <td>{{ paper['status'] }}</td>
             <td>{{ paper['date'] }}</td>
-      <td><a href="/download/{{ paper['filename'] }}">{{ paper['filename'] }}</a></td>
+            <td><a href="https://s3.amazonaws.com/zappa-jepozm5pw/{{ paper['filename'] }}">{{ paper['filename'] }}</a></td>
         </tr>
       {% endfor %}
     </tbody>
