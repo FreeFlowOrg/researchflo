@@ -25,7 +25,7 @@
 
   <div class="col-md-3">
 
-    <img class="img-thumbnail" src="//placehold.it/200x200" width="200" heigh="200" alt="">
+    <img class="img-thumbnail" src="//placehold.it/200x200" width="200" height="200" alt="">
 
     <h5>Logged in as <i>{{ session['email'] }}</i> </h5>
 
@@ -43,39 +43,19 @@
            <option value="energy"{% if request.form['select-domain']=='energy' %}selected{% endif %}>Energy</option>
            <option value="nanomaterials"{% if request.form['select-domain']=='nanomaterials' %}selected{% endif %}>Nanomaterials</option>
          </select>
-         <button type=Submit>Filter</button>
+         <input type=submit>
 </form>
-         <br>
-         <!-- CSS Flexbox type feed -->
-
+         <br>         <!-- CSS Flexbox type feed -->
          <div class="flex-container">
-          {% for file in files %}
+      {% for file in files %}
           <div>
            <strong>Title</strong>: {{ file['title'] }}<br>
            <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
-           <a href="/download/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
+            <a href="https://s3.amazonaws.com/zappa-jepozm5pw/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
             <a href="/paper_editor/{{ file['title'] }}">Send to Editor for Final Review</a><br><br>
-            {% if file['status']!='Under Peer Review' %}
-            <a href="/paper_peer_review/{{ file['title'] }}">Shift to Peer Review</a><br><br>
-            {% else %}
-            <i>Peers Reviewing</i><br><br>
-            {% endif %}
             <a href="/paper_revision/{{ file['title'] }}">Request Review</a><br><br>
-
          </div>
-          {% endfor %}
-
-
-          </div>
-        <div class="col-md-3">
+      {% endfor %}
         </div>
-           <!-- //CSS Flexbox type feed -->
-
-
-<!-- Status table + File Upload  -->
-
-
- <!-- col-md-9 --> <!-- Center Section -->
-<!-- //Status table + File Upload  -->
-</div>
+        </div>
 {% endblock %}

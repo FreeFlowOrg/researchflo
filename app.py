@@ -59,35 +59,7 @@ def login_required(test):
             flash('You need to login first.')
             return redirect(url_for('login'))
     return wrap
-'''
-
-#----------------------------------------------------------------------------#
-#UPLOAD TO S3 BUCKET method
-#----------------------------------------------------------------------------#
-def upload_file_to_s3(file, bucket_name, acl="public-read"):
-
-
-    try:
-        
-        s3.upload_fileobj(
-            file,
-            bucket_name,
-            file.filename,
-            ExtraArgs={
-                "ACL": acl,
-                "ContentType":file.content_type
-            }
-        )
-
-    except Exception as e:
-        print("Something Happened: ", e)
-        return e
-
-    return "{}{}".format(app.config["S3_LOCATION"], file.filename)
-
-#----------------------------------------------------------------------------#
-
-#----------------------------------------------------------------------------#
+'''#----------------------------------------------------------------------------#
 s3 = boto3.client('s3')
 
 @app.route('/')
@@ -148,7 +120,7 @@ def paper_upload(): # Journal Upload
         filename = files.save(request.files['file'])
         file = request.files['file']
         doc = Journal(title=request.form['Title'],user_email=session['email'],
-                    domain=request.form['domain'],status="Submission received",filename=filename,date=datetime.datetime.utcnow())
+                    domain=request.form['domain'],status="submission received",filename=filename,date=datetime.datetime.utcnow())
         doc.save()
         data = open(app.config['UPLOADED_FILES_DEST']+'/'+filename, 'rb')
         s3 = boto3.client('s3')
@@ -165,17 +137,17 @@ def narrow_down():
                     files = Journal.query.filter(Journal.status=='Accepted').all()
 
                 else:
-                    files = Journal.query.filter_by(domain=request.form['select-domain']).all()
+                    files = Journal.query.filter(Journal.domain==request.form['select-domain']).all()
                 return render_template('pages/sub.html',files=files)
             except Exception as e:
                 return str(e)
 
-        elif session['user_type'] == 'Reviewer':
-            if request.form['select-domain'] == 'all':
-                files = Journal.query.filter(Journal.status=='Submission Received' and Journal.status=='Under Peer Review').all()
+        if session['user_type'] == 'Reviewer':
+            if request.form['select-domain'] == "all":
+                files = Journal.query.filter_by(status="submission received").all()
                 return render_template('pages/rev.html',files=files)
             else:
-                files = Journal.query.filter(Journal.domain==request.form['select-domain'] and Journal.status == 'Submission Received' and Journal.status=='Under Peer Review').all()
+                files = Journal.query.filter_by(status="submission received").all()
                 return render_template('pages/rev.html',files=files)
 
         elif session['user_type'] == 'Editor':
@@ -183,7 +155,7 @@ def narrow_down():
                 files = Journal.query.filter(Journal.status=='Under Editor Review').all()
                 return render_template('pages/editor.html',files=files)
             else:
-                files = Journal.query.filter(Journal.domain==request.form['select-domain'],Journal.status == 'Under Editor Review').all()
+                files = Journal.query.filter(Journal.domain==request.form['select-domain'] and Journal.status == 'Under Editor Review').all()
                 return render_template('pages/editor.html',files=files)
 
 @app.route('/narrow_down_peer_review',methods=['POST','GET'])
@@ -191,11 +163,11 @@ def narrow_down_peer_review():
     if request.method=='POST':
         try:
             if request.form['select-domain'] == 'all':
-                files = Journal.query.filter(Journal.status=='Under Peer Review').all()
-
+                files = Journal.query.filter(Journal.status=='submission received').all()
+                return render_template('pages/sub_peer.html',files=files)
             else:
-                files = Journal.query.filter(Journal.domain==request.form['select-domain'] and Journal.status=='Under Peer Review').all()
-            return render_template('pages/sub_peer.html',files=files)
+                files = Journal.query.filter(Journal.domain==request.form['select-domain'] and Journal.status=='submission received').all()
+                return render_template('pages/sub_peer.html',files=files)
         except Exception as e:
             return str(e)
 
@@ -203,11 +175,11 @@ def narrow_down_peer_review():
 @app.route('/dashboard',methods=['POST','GET'])
 def dashboard():
     if session['user_type'] == 'Publisher':
-        return render_template('pages/pub.html',papers=Journal.query.filter_by(user_email=session['email']).all(),
+        return render_template('pages/pub.html',papers=Journal.query.filter(Journal.user_email==session['email']).all(),
                                 comments=Comments.query.filter_by(user=session['email']).all())
 
     elif session['user_type'] == 'Reviewer':
-        return render_template('pages/rev.html',files = Journal.query.filter(Journal.status=='Submission Received').all())
+        return render_template('pages/rev.html',files=Journal.query.filter(Journal.status=='Peer Review Completed').all())
 
     elif session['user_type'] == 'Subscriber':
         return render_template('pages/sub.html',files=Journal.query.filter(Journal.status=='Accepted').all())
@@ -266,7 +238,7 @@ def paper_accept(title):
 
 @app.route('/sub_peer',methods=['POST','GET'])
 def sub_peer():
-    return render_template('pages/sub_peer.html',files=Journal.query.filter(Journal.status=='Under Peer Review').all())
+    return render_template('pages/sub_peer.html',files=Journal.query.filter(Journal.status=='submission received').all())
 
 
 
@@ -292,7 +264,10 @@ def check_notification():
 def paper_error_submit():
         comment = Comments(user=request.form['Email'],commenter=session['email'],title=request.form['Title'],desc=request.form['Detailed Description'])
         comment.save()
-        flash('Relevance/Errors in paper notified')
+        data = Journal.query.filter(Journal.title==request.form['paper-title']).first()
+        data.status='Peer Review Completed'
+        data.save()
+        flash('Relevance/Errors in paper notified. Peer Review for the respective paper completed')
         return redirect(url_for('dashboard'))
 
 @app.route('/paper_error',methods=['POST','GET'])

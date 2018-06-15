@@ -34,16 +34,16 @@
 
 <div class="col-md-9">
   <h2> Published Journals</h2>
-  <form action = "{{ url_for('narrow_down') }}" method = "POST" >
+  <form action = "{{ url_for('narrow_down') }}" method = "POST">
          Category:
-         <select name="select-domain" >
+         <select name="select-domain">
            <option value="all" selected>All</option>
            <option value="electronics" {% if request.form['select-domain']=='electronics' %}selected{% endif %}>Electronics</option>
            <option value="ceramics"{% if request.form['select-domain']=='ceramics' %}selected{% endif %}>Ceramics</option>
            <option value="energy"{% if request.form['select-domain']=='energy' %}selected{% endif %}>Energy</option>
            <option value="nanomaterials"{% if request.form['select-domain']=='nanomaterials' %}selected{% endif %}>Nanomaterials</option>
          </select>
-         <button type=Submit>Filter</button>
+         <input type=submit>
 </form>
          <br>
          <!-- CSS Flexbox type feed -->
@@ -51,9 +51,9 @@
          <div class="flex-container">
           {% for file in files %}
           <div>
-           <strong>Title</strong>: {{ file['title'] }}<br>
+           <strong>Title</strong>: {{ file['title'] }} <br>
            <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
-           <a href="/download/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
+           <a href="https://s3.amazonaws.com/zappa-jepozm5pw/{{ file['title'] }}"><i class="fa fa-download"></i></a><br>
          </div>
           {% endfor %}
 
