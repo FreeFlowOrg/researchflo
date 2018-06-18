@@ -19,6 +19,7 @@ import time
 import random
 from sqlalchemy.pool import StaticPool
 import boto3,botocore
+import string
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -32,6 +33,16 @@ db = SQLAlchemy(app)
 files = UploadSet('files',DOCUMENTS)
 app.config['UPLOADED_FILES_DEST'] = 'static/journals'
 app.config['UPLOADED_FILES_ALLOW']=['doc','docx']
+app.config.update(dict(
+    DEBUG = True,
+    MAIL_SERVER = "smtp.gmail.com",
+    MAIL_PORT = 465,
+    MAIL_USE_TLS = False,
+    MAIL_USE_SSL = True,
+    MAIL_USERNAME = 'skilllauncher7@gmail.com',
+    MAIL_PASSWORD = 'skill7launcher'
+))
+mail= Mail(app)
 configure_uploads(app,files)
 
 # /file upload config
@@ -126,6 +137,11 @@ def paper_upload(): # Journal Upload
         s3 = boto3.client('s3')
         s3.put_object(Bucket=app.config['S3_BUCKET'], Key=filename, Body=data)
         flash('Your paper has been sent for Review. You can check your review status in the Submitted Papers section')
+        users=User.query.all()
+        emails=users.email
+        msg = Message('A new paper is up on the open web space!',sender='skilllauncher7@gmail.com',recipients=emails)
+        msg.html=render_template('pages/new_paper.html',new_paper=url_for('dashboard',_external=True), _external=True)
+        mail.send(msg)
         return redirect(url_for('dashboard'))
 
 @app.route('/narrow_down',methods=['POST','GET'])
@@ -262,7 +278,7 @@ def check_notification():
 
 @app.route('/paper_error_submit',methods=['POST','GET'])
 def paper_error_submit():
-        comment = Comments(user=request.form['Email'],commenter=session['email'],title=request.form['Title'],desc=request.form['Detailed Description'])
+        comment = Comments(user=form.email.data,commenter=session['email'],title=request.form['Title'],desc=request.form['Detailed Description'])
         comment.save()
         data = Journal.query.filter(Journal.title==request.form['paper-title']).first()
         data.status='Peer Review Completed'
@@ -272,7 +288,7 @@ def paper_error_submit():
 
 @app.route('/paper_error',methods=['POST','GET'])
 def paper_error():
-    email = request.form['Email']
+    email = form.email.data
     return render_template('pages/paper_error.html',email=email)
 
 @app.route('/register',methods=['POST','GET'])
@@ -296,7 +312,41 @@ def register():
 @app.route('/forgot',methods=['POST','GET'])
 def forgot():
     form = ForgotForm(request.form)
-    return render_template('forms/forgot.html', form=form)
+    forgot_url = url_for('reset',_external=True)
+    if request.method == 'POST':
+        users = User.query.all()
+        for user in users:
+            if user.email == form.email.data:
+                msg = Message('Reset Password',sender='skilllauncher7@gmail.com',recipients=[form.email.data])
+                msg.html=render_template('pages/forgot_password.html',forgot_url=forgot_url, _external=True)
+                mail.send(msg)
+                session.clear()
+                session['user_email'] = form.email.data
+                flash('A reset confirmation e-mail has been sent to the specified email address')
+                return redirect(url_for('home'))
+        flash('The provided mail is not a valid email address.')
+        return redirect(url_for('forgot'))
+    if request.method == 'GET':
+        return render_template('forms/forgot.html', form=form)
+
+@app.route('/reset',methods=['POST','GET'])
+def reset():
+    form = ResetForm(request.form)
+    if request.method=='POST':
+        if form.password.data!=form.repeat_password.data:
+            flash('Passwords do not match')
+            return redirect(url_for('reset'))
+        hashed_password_new = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt(10))
+        data = User.query.filter_by(email=session['email']).first()
+        data.password=hashed_password_new
+        data.save()
+        session.clear()
+        flash('Your password has been reset successfully. Please login with the updated credentials.')
+        return redirect(url_for('login'))
+    else:
+        return render_template('forms/reset.html')
+
+
 
 # Error handlers.
 

@@ -35,3 +35,11 @@ class ForgotForm(Form):
     email = TextField(
         'Email', validators=[DataRequired(), Length(min=6, max=40)]
     )
+
+class ResetForm(Form):
+    password = TextField(
+        'Password', validators=[DataRequired(), Length(min=6, max=40)]
+    )
+    repeat_password = TextField(
+        'Confirm-Password', validators=[DataRequired(), Length(min=6, max=40)]
+    )
