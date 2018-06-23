@@ -182,7 +182,7 @@ def narrow_down_peer_review():
                 files = Journal.query.filter(Journal.status=='submission received').all()
                 return render_template('pages/sub_peer.html',files=files)
             else:
-                files = Journal.query.filter(Journal.domain==request.form['select-domain'] and Journal.status=='submission received').all()
+                files = Journal.query.filter(Journal.domain==request.form['select-domain']).all()
                 return render_template('pages/sub_peer.html',files=files)
         except Exception as e:
             return str(e)
@@ -214,10 +214,10 @@ def dashboard():
 
 @app.route('/paper_editor/<title>',methods=['POST','GET'])
 def paper_editor(title):
-    paper = Journal.query.filter_by(title=title).first()
+    paper = Journal.query.filter(Journal.title==title).first()
     paper.status = 'Under Editor Review'
     paper.save()
-    flash('The Journal Paper has been reviewed. Information will be communicated to the Publisher.')
+    flash('The Journal Paper has been reviewed under a Reviewer. Information will be communicated to the Publisher.')
     return redirect(url_for('dashboard'))
 
 @app.route('/paper_peer_review/<title>',methods=['POST','GET'])
@@ -278,7 +278,7 @@ def check_notification():
 
 @app.route('/paper_error_submit',methods=['POST','GET'])
 def paper_error_submit():
-        comment = Comments(user=form.email.data,commenter=session['email'],title=request.form['Title'],desc=request.form['Detailed Description'])
+        comment = Comments(user=request.form['Email'],commenter=session['email'],title=request.form['Title'],desc=request.form['Detailed Description'])
         comment.save()
         data = Journal.query.filter(Journal.title==request.form['paper-title']).first()
         data.status='Peer Review Completed'

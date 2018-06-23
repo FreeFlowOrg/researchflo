@@ -52,8 +52,8 @@
            <strong>Title</strong>: {{ file['title'] }}<br>
            <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
             <a href="https://s3.amazonaws.com/zappa-jepozm5pw/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
-            <a href="/paper_editor/{{ file['title'] }}">Send to Editor for Final Review</a><br><br>
-            <a href="/paper_revision/{{ file['title'] }}">Request Review</a><br><br>
+            <a href="{{ url_for('paper_editor',title=file['title']) }}">Send to Editor for Final Review</a><br><br>
+            <a href="{{ url_for('paper_revision',title=file['title']) }}">Request Review</a><br><br>
          </div>
       {% endfor %}
         </div>

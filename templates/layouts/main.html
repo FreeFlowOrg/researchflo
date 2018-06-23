@@ -65,7 +65,7 @@
               <a class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a></a></li>
-                {% if session['user_type'] == 'Subscriber' or 'Publisher' %}<li><a href="{{url_for('sub_peer')}}">Peer Review</a></li>{% endif %}
+                {% if session['user_type'] == 'Subscriber' or 'Publisher' and session['email'] %}<li><a href="{{url_for('sub_peer')}}">Peer Review</a></li>{% endif %}
                 <li><a>Something else here</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
@@ -73,20 +73,20 @@
                 <li><a>One more separated link</a></li>
               </ul>
             </li>
-            {% if session %}
+            {% if session['email'] %}
             <li {% if request.endpoint == 'dashboard' and not session %} class="active" {% endif %}><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
             <li {% if request.endpoint == 'logout' and not session %} class="active" {% endif %}><a href="{{ url_for('logout') }}">Logout</a></li>
             {% endif %}
           </ul>
           <ul class="nav navbar-nav pull-right">
-            {% if not session %}
+            {% if not session['email'] %}
 
             <li><a href="{{ url_for('register') }}">Signup</a></li>
             <li><a href="{{ url_for('login') }}">Login</a></li>
 
-            {% elif session %}
+            {% elif session['email'] %}
             <br>
-            <li>Logged in as <b>{{ session['email'] }}</b></li>
+            <li>Logged in as<b>{{ session['email'] }}</b></li>
 
             {% endif %}
 

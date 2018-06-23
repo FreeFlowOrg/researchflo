@@ -34,16 +34,16 @@
 
 <div class="col-md-9">
   <h2> Journals for Peer Review</h2>
-  <form action = "{{ url_for('narrow_down_peer_review') }}" method = "POST" >
+  <form name="select-domain" action = "{{ url_for('narrow_down_peer_review') }}" method = "POST" >
          Category:
          <select name="select-domain" >
-           <option value="all" selected>All</option>
-           <option value="electronics" {% if request.form['select-domain']=='electronics' %} selected {% endif %}>Electronics</option>
-           <option value="ceramics"{% if request.form['select-domain']=='ceramics' %} selected {% endif %}>Ceramics</option>
-           <option value="energy"{% if request.form['select-domain']=='energy' %} selected {% endif %}>Energy</option>
-           <option value="nanomaterials"{% if request.form['select-domain']=='nanomaterials' %} selected {% endif %}>Nanomaterials</option>
+           <option value="all">All</option>
+           <option value="electronics" {% if request.form['select-domain']=="electronics" %} selected {% endif %}>Electronics</option>
+           <option value="ceramics"{% if request.form['select-domain']=="ceramics" %} selected {% endif %}>Ceramics</option>
+           <option value="energy"{% if request.form['select-domain']=="energy" %} selected {% endif %}>Energy</option>
+           <option value="nanomaterials"{% if request.form['select-domain']=="nanomaterials" %} selected {% endif %}>Nanomaterials</option>
          </select>
-         <button type=submit>Filter</button>
+         <button type="submit">Filter</button>
 </form>
          <br>
          <!-- CSS Flexbox type feed -->
@@ -53,6 +53,7 @@
           <div>
            <strong>Title</strong>: {{ file['title'] }}<br>
            <strong>Publisher Mail</strong>: {{ file['user_email'] }}<br>
+           <strong>Domain</strong>: {{ file['domain'] }}<br>
            <a href="https://s3.amazonaws.com/zappa-jepozm5pw/{{ file['filename'] }}"><i class="fa fa-download"></i></a><br>
          </div>
         {% endfor %}
