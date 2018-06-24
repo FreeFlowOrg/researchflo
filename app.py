@@ -137,11 +137,11 @@ def paper_upload(): # Journal Upload
         s3 = boto3.client('s3')
         s3.put_object(Bucket=app.config['S3_BUCKET'], Key=filename, Body=data)
         flash('Your paper has been sent for Review. You can check your review status in the Submitted Papers section')
-        users=User.query.all()
-        emails=users.email
-        msg = Message('A new paper is up on the open web space!',sender='skilllauncher7@gmail.com',recipients=emails)
-        msg.html=render_template('pages/new_paper.html',new_paper=url_for('dashboard',_external=True), _external=True)
-        mail.send(msg)
+        users = User.query.all()
+        for user in users:
+                msg = Message('A new paper is up on the open web space!',sender='skilllauncher7@gmail.com',recipients=[user.email])
+                msg.html=render_template('pages/new_paper.html',new_paper=url_for('dashboard',_external=True), _external=True)
+                mail.send(msg)
         return redirect(url_for('dashboard'))
 
 @app.route('/narrow_down',methods=['POST','GET'])
