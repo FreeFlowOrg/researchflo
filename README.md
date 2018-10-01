@@ -21,6 +21,7 @@ Detailed Steps for Installation:
 6. Activate the venv by typing "source venv/bin/activate"
 7. Run "pip install -r requirements.txt"
 8. If everything worked perfectly, run "python app.py".
+`You can also use python3`
 
 ## Deployment
 
